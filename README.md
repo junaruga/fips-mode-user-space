@@ -52,13 +52,12 @@ Check the current FIPS mode status.
 ```
 # fips-mode-setup --check
 Installation of FIPS modules is not completed.
-FIPS mode is enabled.
-Inconsistent state detected.
+FIPS mode is disabled.
 ```
 
 ```
 $ ./fips-mode-user-space-setup status
-/proc/sys/crypto/fips_enabled: 1
+/proc/sys/crypto/fips_enabled: 0
 ```
 
 Enable the kernel FIPS flag.
@@ -115,13 +114,12 @@ Check the current FIPS mode status.
 ```
 # fips-mode-setup --check
 Installation of FIPS modules is not completed.
-FIPS mode is enabled.
-Inconsistent state detected.
+FIPS mode is disabled.
 ```
 
 ```
 $ ./fips-mode-user-space-setup status
-/proc/sys/crypto/fips_enabled: 1
+/proc/sys/crypto/fips_enabled: 0
 ```
 
 Enable the kernel FIPS flag.
