@@ -6,13 +6,24 @@
 
 set -euo pipefail
 
-# A temporary directory. The directory is often not preserved between reboots.
-BASE_DIR="/tmp/fips-mode-user-space"
+# A temporary directory in the real space. The directory is often not preserved
+# between reboots.
+BASE_DIR="/var/tmp/fips-mode-user-space"
 
 exit_status=0
 
 function enable_fips {
     mkdir -p "${BASE_DIR}"
+
+    file_system=$(df --output=source "${BASE_DIR}" | tail -1)
+    if [ "${file_system}" = "tmpfs" ]; then
+        cat <<EOF
+[ERROR] File system ${file_system} not supported as a base directory.
+Change the base directory in the script ${0}.
+EOF
+        exit 1
+    fi
+
     echo '1' > ${BASE_DIR}/fips_enabled
     mount --bind ${BASE_DIR}/fips_enabled /proc/sys/crypto/fips_enabled
     # Set the security context in the SELinux case.
@@ -50,7 +61,7 @@ case "${cmd}" in
         ;;
     *)
         echo "Usage: ${0} status|enable|disable"
-        exit_status=1
+        exit_status=2
         ;;
 esac
 
